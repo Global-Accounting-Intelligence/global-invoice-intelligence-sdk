@@ -1,0 +1,9 @@
+{
+  "invoice_line_id": "1",
+  "suggested_material_id": "ITEM-000154",
+  "confidence_score": 98,
+  "status_color": "green",
+  "explanation": "supplier reference matched",
+  "evidence": {},
+  "improvement_suggestions": []
+}

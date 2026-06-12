@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NormalizedInvoice",
+  "type": "object",
+  "required": [
+    "invoice_id",
+    "source_type",
+    "supplier",
+    "lines",
+    "totals"
+  ],
+  "properties": {
+    "invoice_id": {
+      "type": "string"
+    },
+    "source_type": {
+      "type": "string",
+      "enum": [
+        "qr",
+        "pdf",
+        "image",
+        "xml",
+        "json",
+        "api",
+        "connector"
+      ]
+    },
+    "invoice_number": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "issue_date": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "currency": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "supplier": {
+      "$ref": "#/definitions/party"
+    },
+    "buyer": {
+      "$ref": "#/definitions/party"
+    },
+    "lines": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/line"
+      }
+    },
+    "totals": {
+      "type": "object"
+    },
+    "evidence": {
+      "type": "object"
+    }
+  },
+  "definitions": {
+    "party": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "tax_number": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "country_code": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "line": {
+      "type": "object",
+      "properties": {
+        "line_id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "supplier_item_code": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "quantity": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "uom": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "unit_price": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "tax_rate": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "line_total": {
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      }
+    }
+  }
+}

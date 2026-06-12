@@ -1,0 +1,6 @@
+{
+  "match_result_id": "mmr_123",
+  "action": "corrected",
+  "selected_material_id": "ITEM-00999",
+  "reason": "User confirmed this supplier description belongs to ITEM-00999."
+}

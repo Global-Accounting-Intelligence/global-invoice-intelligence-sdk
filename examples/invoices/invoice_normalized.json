@@ -1,0 +1,17 @@
+{
+  "invoice_id": "INV-DEMO-001",
+  "supplier_name": "Demo Supplier",
+  "currency": "JOD",
+  "lines": [
+    {
+      "line_id": "1",
+      "description": "Pepsi 330ml",
+      "quantity": 10,
+      "uom": "PCS",
+      "unit_price": 0.25,
+      "tax_rate": 16,
+      "supplier_item_code": "SUP-PEP-330",
+      "barcode": "628000000001"
+    }
+  ]
+}

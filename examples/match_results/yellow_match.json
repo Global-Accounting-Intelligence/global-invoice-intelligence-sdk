@@ -1,0 +1,14 @@
+{
+  "invoice_line_id": "1",
+  "suggested_material_id": "ITEM-000154",
+  "confidence_score": 78,
+  "status_color": "yellow",
+  "explanation": "description is similar",
+  "evidence": {},
+  "improvement_suggestions": [
+    {
+      "type": "add_alias",
+      "value": "Pepsi 330ml"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "invoice_id": "INV-PO-001",
+  "po_number": "PO-001",
+  "lines": [
+    {
+      "line_id": "1",
+      "description": "Pepsi 330ml",
+      "po_line_id": "PO-001-1"
+    }
+  ]
+}

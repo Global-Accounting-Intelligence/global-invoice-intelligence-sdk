@@ -1,0 +1,28 @@
+{
+  "info": {
+    "name": "Global Invoice Intelligence",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/health"
+      }
+    },
+    {
+      "name": "Match Invoice",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-Tenant-ID",
+            "value": "tenant_demo"
+          }
+        ],
+        "url": "{{base_url}}/v1/invoices/match"
+      }
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "invoice_line_id": "1",
+  "suggested_material_id": null,
+  "confidence_score": 40,
+  "status_color": "red",
+  "explanation": "multiple similar candidates",
+  "evidence": {},
+  "improvement_suggestions": []
+}

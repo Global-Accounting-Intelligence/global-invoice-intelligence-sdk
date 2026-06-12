@@ -1,0 +1,23 @@
+{
+  "request_id": "req_123",
+  "results": [
+    {
+      "invoice_line_id": "1",
+      "suggested_material_id": "ITEM-00452",
+      "confidence": 91,
+      "color": "green",
+      "reason": "Name similarity, same supplier, supplier code matched, and price close to previous invoices.",
+      "evidence": [
+        "supplier_item_code_match",
+        "name_similarity_0.88",
+        "price_history_close"
+      ],
+      "conflicts": [],
+      "recommended_improvements": [
+        "Add supplier item code CE285A to material card",
+        "Add supplier alias HP 85A TONER BLACK"
+      ],
+      "requires_human_review": false
+    }
+  ]
+}

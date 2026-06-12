@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CountryPack",
+  "type": "object",
+  "required": [
+    "country_code",
+    "version",
+    "status",
+    "rules"
+  ],
+  "properties": {
+    "country_code": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "auto_generated_draft",
+        "community_review",
+        "expert_review",
+        "beta",
+        "production",
+        "deprecated",
+        "archived"
+      ]
+    },
+    "effective_from": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "rules": {
+      "type": "array"
+    }
+  }
+}

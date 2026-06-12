@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MatchResult",
+  "type": "object",
+  "required": [
+    "invoice_line_id",
+    "confidence_score",
+    "status_color",
+    "explanation"
+  ],
+  "properties": {
+    "invoice_line_id": {
+      "type": "string"
+    },
+    "suggested_material_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "confidence_score": {
+      "type": "number"
+    },
+    "status_color": {
+      "type": "string",
+      "enum": [
+        "green",
+        "yellow",
+        "red"
+      ]
+    },
+    "explanation": {
+      "type": "string"
+    },
+    "evidence": {
+      "type": "object"
+    },
+    "improvement_suggestions": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  }
+}

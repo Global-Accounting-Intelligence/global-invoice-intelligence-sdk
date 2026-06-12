@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MaterialScore",
+  "type": "object",
+  "properties": {
+    "material_id": {
+      "type": "string"
+    },
+    "score": {
+      "type": "number"
+    },
+    "missing": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

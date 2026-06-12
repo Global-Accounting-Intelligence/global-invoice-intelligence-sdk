@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MaterialMatchResult",
+  "type": "object",
+  "required": [
+    "invoice_line_id",
+    "confidence",
+    "color",
+    "reason",
+    "recommended_improvements"
+  ],
+  "properties": {
+    "invoice_line_id": {
+      "type": "string"
+    },
+    "suggested_material_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "confidence": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "color": {
+      "type": "string",
+      "enum": [
+        "green",
+        "yellow",
+        "orange",
+        "red"
+      ]
+    },
+    "reason": {
+      "type": "string"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "conflicts": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "alternatives": {
+      "type": "array"
+    },
+    "recommended_improvements": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "requires_human_review": {
+      "type": "boolean"
+    }
+  }
+}

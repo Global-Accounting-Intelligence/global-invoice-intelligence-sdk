@@ -1,0 +1,10 @@
+{
+  "source_type": "xml",
+  "tenant_id": "tenant_123",
+  "country_hint": "JO",
+  "purchase_order": null,
+  "options": {
+    "run_material_matching": true,
+    "run_quality_scoring": true
+  }
+}

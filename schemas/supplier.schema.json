@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Supplier",
+  "type": "object",
+  "required": [
+    "supplier_id",
+    "name"
+  ],
+  "properties": {
+    "supplier_id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "tax_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

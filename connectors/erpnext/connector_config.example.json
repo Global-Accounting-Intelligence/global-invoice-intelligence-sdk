@@ -1,0 +1,6 @@
+{
+  "api_url": "https://api.example.com",
+  "api_key": "YOUR_API_KEY",
+  "tenant_id": "tenant_demo",
+  "erpnext_url": "https://erp.example.com"
+}

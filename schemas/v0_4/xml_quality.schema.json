@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "XmlQualityReport",
+  "type": "object",
+  "required": [
+    "score",
+    "color",
+    "errors",
+    "warnings"
+  ],
+  "properties": {
+    "score": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "color": {
+      "type": "string",
+      "enum": [
+        "green",
+        "yellow",
+        "orange",
+        "red"
+      ]
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "missing_fields": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "country_pack_compatibility": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

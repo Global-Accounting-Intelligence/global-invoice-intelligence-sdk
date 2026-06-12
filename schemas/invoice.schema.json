@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Invoice",
+  "type": "object",
+  "required": [
+    "invoice_id",
+    "lines"
+  ],
+  "properties": {
+    "invoice_id": {
+      "type": "string"
+    },
+    "supplier_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "currency": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "lines": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/invoice_line"
+      }
+    }
+  },
+  "$defs": {
+    "invoice_line": {
+      "type": "object",
+      "required": [
+        "line_id",
+        "description"
+      ],
+      "properties": {
+        "line_id": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "quantity": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "uom": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "unit_price": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "tax_rate": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "supplier_item_code": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "barcode": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "po_line_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    }
+  }
+}

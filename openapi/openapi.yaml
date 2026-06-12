@@ -1,0 +1,47 @@
+openapi: 3.0.3
+info:
+  title: Global Invoice Intelligence API
+  version: 0.1.0
+paths:
+  /health:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: OK
+  /v1/invoices/normalize:
+    post:
+      summary: Normalize invoice
+      parameters:
+        - name: X-Tenant-ID
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Normalized invoice
+  /v1/invoices/match:
+    post:
+      summary: Match invoice lines to materials
+      parameters:
+        - name: X-Tenant-ID
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Match result
+  /v1/feedback/correction:
+    post:
+      summary: Submit correction feedback
+      parameters:
+        - name: X-Tenant-ID
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Feedback accepted

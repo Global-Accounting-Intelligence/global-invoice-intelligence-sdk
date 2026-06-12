@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FeedbackEvent",
+  "type": "object",
+  "required": [
+    "event_type",
+    "entity_id",
+    "action"
+  ],
+  "properties": {
+    "event_type": {
+      "type": "string"
+    },
+    "entity_id": {
+      "type": "string"
+    },
+    "action": {
+      "type": "string",
+      "enum": [
+        "approved",
+        "rejected",
+        "corrected",
+        "accepted_improvement",
+        "rejected_improvement"
+      ]
+    },
+    "old_value": {
+      "type": "object"
+    },
+    "new_value": {
+      "type": "object"
+    },
+    "reason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

@@ -1,0 +1,2 @@
+class GlobalInvoiceIntelligenceError(Exception):
+    pass

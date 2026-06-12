@@ -1,0 +1,12 @@
+country_pack: India
+version: "0.1-draft"
+status: draft
+rules:
+  - rule_code: REQUIRED_INVOICE_NUMBER
+    severity: error
+    description: Invoice number should be present.
+    source: TBD
+  - rule_code: TOTALS_MUST_BALANCE
+    severity: blocking
+    description: Invoice totals should match line totals and taxes within configured tolerance.
+    source: internal_arithmetic_rule

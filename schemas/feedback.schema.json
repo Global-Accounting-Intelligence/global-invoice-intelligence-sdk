@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Feedback",
+  "type": "object",
+  "required": [
+    "invoice_line_id",
+    "action"
+  ],
+  "properties": {
+    "invoice_line_id": {
+      "type": "string"
+    },
+    "action": {
+      "type": "string",
+      "enum": [
+        "accepted",
+        "rejected",
+        "corrected"
+      ]
+    },
+    "selected_material_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "comment": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

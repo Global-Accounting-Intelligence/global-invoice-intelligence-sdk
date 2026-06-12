@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Material",
+  "type": "object",
+  "required": [
+    "material_id",
+    "name"
+  ],
+  "properties": {
+    "material_id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "aliases": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "supplier_references": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "barcodes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "uoms": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "tax_category": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

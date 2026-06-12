@@ -1,0 +1,19 @@
+[
+  {
+    "material_id": "ITEM-000154",
+    "name": "Pepsi Can 330ml",
+    "aliases": [
+      "Pepsi 330ml"
+    ],
+    "supplier_references": [
+      "SUP-PEP-330"
+    ],
+    "barcodes": [
+      "628000000001"
+    ],
+    "uoms": [
+      "PCS"
+    ],
+    "tax_category": "VAT_STANDARD"
+  }
+]

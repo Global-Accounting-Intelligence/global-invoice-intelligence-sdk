@@ -1,0 +1,9 @@
+{
+  "invoice_id": "INV-NOPO-001",
+  "lines": [
+    {
+      "line_id": "1",
+      "description": "Pepsi 330ml"
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+openapi: 3.1.0
+info:
+  title: Global Accounting Intelligence API
+  version: 0.3.0
+  description: Invoice-to-ERP intelligence API with Invoice-driven Material Intelligence.
+servers:
+  - url: https://api.globalaccountingintelligence.com/v1
+security:
+  - bearerAuth: []
+paths:
+  /invoices:
+    post:
+      summary: Submit invoice for processing
+      operationId: submitInvoice
+      responses:
+        '202':
+          description: Invoice accepted for processing
+  /invoices/{invoice_id}:
+    get:
+      summary: Get invoice intelligence result
+      parameters:
+        - name: invoice_id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Invoice result }
+  /match/materials:
+    post:
+      summary: Match invoice lines to customer material master
+      responses:
+        '200': { description: Material matching results }
+  /quality/materials:
+    post:
+      summary: Score material cards or item master list
+      responses:
+        '200': { description: Material quality report }
+  /quality/companies:
+    post:
+      summary: Score company/supplier/customer cards
+      responses:
+        '200': { description: Company quality report }
+  /quality/xml:
+    post:
+      summary: Score invoice XML quality
+      responses:
+        '200': { description: XML quality report }
+  /feedback/matches:
+    post:
+      summary: Submit user feedback on match results
+      responses:
+        '202': { description: Feedback accepted }
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
