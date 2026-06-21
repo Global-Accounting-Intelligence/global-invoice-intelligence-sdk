@@ -2,46 +2,222 @@ openapi: 3.0.3
 info:
   title: Global Invoice Intelligence API
   version: 0.1.0
+  description: |
+    Global Invoice Intelligence API.
+
+    ## Versioning and deprecation (`/v1` frozen)
+
+    Business endpoints are served under the `/v1` base path. The `/v1` contract
+    is **frozen**: no breaking change may be introduced to `/v1`. A breaking
+    change — removing or renaming a field, changing a type, tightening
+    validation, or altering documented semantics — requires a new major version
+    served under `/v2`. Only backward-compatible additions (new optional fields,
+    new endpoints, new optional headers) may be made within `/v1`.
+
+    ## Authentication
+
+    All tenant-scoped business endpoints require an API key supplied as an HTTP
+    Bearer token (`Authorization: Bearer <api-key>`) together with the
+    `X-Tenant-ID` header identifying the tenant the request is scoped to. The
+    `/health` endpoint is public and unauthenticated.
+
+    ## Correlation, idempotency, and rate limiting
+
+    Clients may send `X-Request-ID` for end-to-end correlation; the same value is
+    echoed on the response. Mutating endpoints accept an `Idempotency-Key` header
+    so retries can be made safely. Authenticated responses carry the
+    `X-RateLimit-*` headers, and requests that exceed the quota receive `429`.
+
+    These are envelope-level conventions only. Request and response bodies
+    declare the `application/json` media type but are not yet bound to canonical
+    component schemas (a later, separately gated step).
+
+# Default security: HTTP Bearer (API key) applies to every operation; the
+# public /health operation overrides this with an empty requirement.
+security:
+  - BearerAuth: []
+
 paths:
   /health:
     get:
       summary: Health check
+      description: Public, unauthenticated health probe.
+      security: []
       responses:
         '200':
           description: OK
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
+          content:
+            application/json:
+              schema:
+                type: object
+
   /v1/invoices/normalize:
     post:
       summary: Normalize invoice
       parameters:
-        - name: X-Tenant-ID
-          in: header
-          required: true
-          schema:
-            type: string
+        - $ref: '#/components/parameters/TenantIdHeader'
+        - $ref: '#/components/parameters/IdempotencyKeyHeader'
+        - $ref: '#/components/parameters/RequestIdHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
       responses:
         '200':
           description: Normalized invoice
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                type: object
+        '429':
+          $ref: '#/components/responses/RateLimited'
+
   /v1/invoices/match:
     post:
       summary: Match invoice lines to materials
       parameters:
-        - name: X-Tenant-ID
-          in: header
-          required: true
-          schema:
-            type: string
+        - $ref: '#/components/parameters/TenantIdHeader'
+        - $ref: '#/components/parameters/IdempotencyKeyHeader'
+        - $ref: '#/components/parameters/RequestIdHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
       responses:
         '200':
           description: Match result
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                type: object
+        '429':
+          $ref: '#/components/responses/RateLimited'
+
   /v1/feedback/correction:
     post:
       summary: Submit correction feedback
       parameters:
-        - name: X-Tenant-ID
-          in: header
-          required: true
-          schema:
-            type: string
+        - $ref: '#/components/parameters/TenantIdHeader'
+        - $ref: '#/components/parameters/IdempotencyKeyHeader'
+        - $ref: '#/components/parameters/RequestIdHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
       responses:
         '200':
           description: Feedback accepted
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/X-RateLimit-Remaining'
+            X-RateLimit-Reset:
+              $ref: '#/components/headers/X-RateLimit-Reset'
+          content:
+            application/json:
+              schema:
+                type: object
+        '429':
+          $ref: '#/components/responses/RateLimited'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: >-
+        API key supplied as an HTTP Bearer token
+        (`Authorization: Bearer <api-key>`).
+
+  parameters:
+    TenantIdHeader:
+      name: X-Tenant-ID
+      in: header
+      required: true
+      description: Identifier of the tenant the request is scoped to.
+      schema:
+        type: string
+
+    IdempotencyKeyHeader:
+      name: Idempotency-Key
+      in: header
+      required: false
+      description: >-
+        Client-generated key that lets a mutating request be retried safely
+        without being processed twice.
+      schema:
+        type: string
+
+    RequestIdHeader:
+      name: X-Request-ID
+      in: header
+      required: false
+      description: >-
+        Client-supplied correlation identifier; echoed back on the response.
+      schema:
+        type: string
+
+  headers:
+    X-Request-ID:
+      description: Correlation identifier for this request/response pair.
+      schema:
+        type: string
+    X-RateLimit-Limit:
+      description: Maximum number of requests permitted in the current window.
+      schema:
+        type: integer
+    X-RateLimit-Remaining:
+      description: Requests remaining in the current window.
+      schema:
+        type: integer
+    X-RateLimit-Reset:
+      description: Unix epoch seconds at which the current window resets.
+      schema:
+        type: integer
+
+  responses:
+    RateLimited:
+      description: Rate limit exceeded.
+      headers:
+        X-Request-ID:
+          $ref: '#/components/headers/X-Request-ID'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/X-RateLimit-Limit'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/X-RateLimit-Remaining'
+        X-RateLimit-Reset:
+          $ref: '#/components/headers/X-RateLimit-Reset'
+      content:
+        application/json:
+          schema:
+            type: object
