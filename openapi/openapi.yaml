@@ -28,9 +28,11 @@ info:
     so retries can be made safely. Authenticated responses carry the
     `X-RateLimit-*` headers, and requests that exceed the quota receive `429`.
 
-    These are envelope-level conventions only. Request and response bodies
-    declare the `application/json` media type but are not yet bound to canonical
-    component schemas (a later, separately gated step).
+    Request and response bodies declare the `application/json` media type.
+    Canonical component schemas are registered under `components.schemas` and
+    bound to request/response bodies only where a clear existing schema applies;
+    bodies whose shape is not yet defined remain generic objects pending later,
+    separately gated steps.
 
 # Default security: HTTP Bearer (API key) applies to every operation; the
 # public /health operation overrides this with an empty requirement.
@@ -66,7 +68,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
+              $ref: '#/components/schemas/Invoice'
       responses:
         '200':
           description: Normalized invoice
@@ -82,7 +84,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
+                $ref: '#/components/schemas/Invoice'
         '429':
           $ref: '#/components/responses/RateLimited'
 
@@ -98,9 +100,14 @@ paths:
         content:
           application/json:
             schema:
-              type: object
+              $ref: '#/components/schemas/Invoice'
       responses:
         '200':
+          # Left generic intentionally: MatchResult describes a single
+          # invoice-line result, but this endpoint matches a whole (multi-line)
+          # invoice. Binding to the singular MatchResult would assert a
+          # response shape (single vs. collection, bare array vs. envelope)
+          # that is not yet defined. Deferred to a later, separately gated step.
           description: Match result
           headers:
             X-Request-ID:
@@ -130,9 +137,13 @@ paths:
         content:
           application/json:
             schema:
-              type: object
+              $ref: '#/components/schemas/Correction'
       responses:
         '200':
+          # Left generic intentionally: the Feedback schema models a recorded
+          # accept/reject/correct action, which is not clearly the acknowledgement
+          # returned when a correction is submitted. Binding it here would imply
+          # response semantics not yet defined. Deferred to a later step.
           description: Feedback accepted
           headers:
             X-Request-ID:
@@ -168,6 +179,9 @@ paths:
         - $ref: '#/components/parameters/RequestIdHeader'
       responses:
         '200':
+          # Left generic intentionally: the result for an invoice spans multiple
+          # lines, whereas MatchResult is a single-line shape. The collection/
+          # envelope shape is not yet defined, so no binding is forced here.
           description: Invoice result
           headers:
             X-Request-ID:
@@ -190,8 +204,7 @@ paths:
       summary: Get material score
       description: >-
         Retrieve the score for a material, scoped to the authenticated tenant.
-        The response body declares the `application/json` media type but is not
-        yet bound to a canonical component schema.
+        The response body is bound to the `MaterialScore` component schema.
       parameters:
         - name: id
           in: path
@@ -216,7 +229,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
+                $ref: '#/components/schemas/MaterialScore'
         '429':
           $ref: '#/components/responses/RateLimited'
 
@@ -234,6 +247,9 @@ paths:
         - $ref: '#/components/parameters/IdempotencyKeyHeader'
         - $ref: '#/components/parameters/RequestIdHeader'
       requestBody:
+        # Left generic intentionally: the push payload is not a single MatchResult
+        # (an invoice spans many lines) and no draft-push contract is defined yet.
+        # Kept generic to avoid implying behavior. Draft-only; never auto-posts.
         required: true
         content:
           application/json:
@@ -241,6 +257,8 @@ paths:
               type: object
       responses:
         '200':
+          # Left generic intentionally: no existing schema describes the
+          # draft-creation acknowledgement. Draft-only; no auto-post.
           description: ERPNext draft created or prepared
           headers:
             X-Request-ID:
@@ -259,6 +277,34 @@ paths:
           $ref: '#/components/responses/RateLimited'
 
 components:
+  schemas:
+    # A3 component schema binding. Each component references the existing,
+    # active SDK JSON Schema file unchanged (external $ref). No schema content
+    # is defined or altered here; the referenced files remain the source of
+    # truth. DD-3 hardening, the six missing public I/O schemas, the retired
+    # legacy schema pack, and any private Core/intelligence internals are
+    # explicitly out of scope for this step.
+    Invoice:
+      $ref: '../schemas/invoice.schema.json'
+    InvoiceLine:
+      $ref: '../schemas/invoice_line.schema.json'
+    Supplier:
+      $ref: '../schemas/supplier.schema.json'
+    Material:
+      $ref: '../schemas/material.schema.json'
+    MatchResult:
+      $ref: '../schemas/match_result.schema.json'
+    MaterialScore:
+      $ref: '../schemas/material_score.schema.json'
+    Correction:
+      $ref: '../schemas/correction.schema.json'
+    Feedback:
+      $ref: '../schemas/feedback.schema.json'
+    Error:
+      $ref: '../schemas/error.schema.json'
+    WebhookEvent:
+      $ref: '../schemas/webhook_event.schema.json'
+
   securitySchemes:
     BearerAuth:
       type: http
