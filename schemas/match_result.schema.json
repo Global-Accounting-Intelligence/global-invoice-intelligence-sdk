@@ -33,7 +33,57 @@
       "type": "string"
     },
     "evidence": {
-      "type": "object"
+      "type": "array",
+      "description": "Public-safe provenance for the match: an ordered list of evidence entries describing which signals supported the result, by what method, and with what per-entry confidence. Support/explanation data only. This must not encode matching weights, trust weights, scoring formulas, ranking algorithms, or any private engine/learning internals.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "method",
+          "source_fields",
+          "confidence"
+        ],
+        "properties": {
+          "method": {
+            "type": "string",
+            "description": "How this evidence entry was derived (provenance only).",
+            "enum": [
+              "deterministic",
+              "ai_assisted"
+            ]
+          },
+          "source_fields": {
+            "type": "array",
+            "description": "Public-safe input field name(s)/path(s) this entry was derived from (e.g. invoice line fields). Field references only; exposes no Core model or engine internals.",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          },
+          "source_type": {
+            "type": "string",
+            "description": "Generic, public-safe category of the source this entry draws on."
+          },
+          "source_reference": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Optional generic, public-safe reference name for the source. Must not expose tenant knowledge-graph internals or private identifiers."
+          },
+          "confidence": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100,
+            "description": "Per-entry confidence on the 0-100 integer scale (consistent with confidence_score, ADR-0008). A reported value only; not a weight, trust tier, or scoring formula.",
+            "$comment": "Scale aligned with confidence_score (ADR-0008 / DC-4) to avoid introducing a conflicting confidence scale."
+          },
+          "summary": {
+            "type": "string",
+            "description": "Optional short, human-readable explanation of this entry. Support text only; must not expose raw prompts, model reasoning, hidden chain-of-thought, or provider raw responses."
+          }
+        }
+      }
     },
     "improvement_suggestions": {
       "type": "array",
