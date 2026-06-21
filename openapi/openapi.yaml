@@ -85,8 +85,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Invoice'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
         '429':
           $ref: '#/components/responses/RateLimited'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 
   /v1/invoices/match:
     post:
@@ -122,8 +132,18 @@ paths:
             application/json:
               schema:
                 type: object
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
         '429':
           $ref: '#/components/responses/RateLimited'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 
   /v1/feedback/correction:
     post:
@@ -158,8 +178,18 @@ paths:
             application/json:
               schema:
                 type: object
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
         '429':
           $ref: '#/components/responses/RateLimited'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 
   /v1/invoices/{id}/result:
     get:
@@ -196,8 +226,16 @@ paths:
             application/json:
               schema:
                 type: object
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
         '429':
           $ref: '#/components/responses/RateLimited'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 
   /v1/materials/{id}/score:
     get:
@@ -230,8 +268,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MaterialScore'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
         '429':
           $ref: '#/components/responses/RateLimited'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 
   /v1/connectors/erpnext/push:
     post:
@@ -273,8 +319,18 @@ paths:
             application/json:
               schema:
                 type: object
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
         '429':
           $ref: '#/components/responses/RateLimited'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 
 components:
   schemas:
@@ -360,6 +416,76 @@ components:
         type: integer
 
   responses:
+    # A4 operational responses. Reusable error responses for existing
+    # operations. Each binds the existing Error component schema as the
+    # response body and echoes the X-Request-ID correlation header. These
+    # declare envelope-level operational outcomes only; they introduce no
+    # error-code catalogue, no runtime behavior, and no canonical-data
+    # semantics. DD-3 hardening and the missing public I/O schemas remain
+    # out of scope.
+    BadRequest:
+      description: >-
+        The request was malformed or failed validation (for example, an
+        invalid or missing request body or header).
+      headers:
+        X-Request-ID:
+          $ref: '#/components/headers/X-Request-ID'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: >-
+        Authentication failed or was not provided. A valid API key
+        (`Authorization: Bearer <api-key>`) is required.
+      headers:
+        X-Request-ID:
+          $ref: '#/components/headers/X-Request-ID'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: >-
+        The caller is authenticated but not permitted to access the
+        requested resource for the scoped tenant.
+      headers:
+        X-Request-ID:
+          $ref: '#/components/headers/X-Request-ID'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found for the scoped tenant.
+      headers:
+        X-Request-ID:
+          $ref: '#/components/headers/X-Request-ID'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Conflict:
+      description: >-
+        The request conflicts with the current state of the resource — for
+        example, an idempotency conflict, a duplicate operation, or a
+        conflicting request state for the supplied `Idempotency-Key`.
+      headers:
+        X-Request-ID:
+          $ref: '#/components/headers/X-Request-ID'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: An unexpected error occurred while processing the request.
+      headers:
+        X-Request-ID:
+          $ref: '#/components/headers/X-Request-ID'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     RateLimited:
       description: Rate limit exceeded.
       headers:
