@@ -1,17 +1,174 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "WebhookEvent",
+  "$comment": "A7 SDK hardening: event_type is constrained and payload is typed through a oneOf mapping over event_type const values. Conservative public-safe subset grounded in the current public SDK contract surface. This schema does not close DD-3 and does not declare B2 complete. Payloads expose public identifiers, status, and provenance only; they must not encode matching weights, trust weights/tiers, scoring or ranking formulas, learning rules, tenant knowledge-graph internals, raw prompts, hidden reasoning, or private engine/Core internals.",
   "type": "object",
   "required": [
     "event_type",
     "payload"
   ],
+  "additionalProperties": false,
   "properties": {
     "event_type": {
-      "type": "string"
+      "type": "string",
+      "description": "Public webhook event type. Constrained to the published in-repo catalogue in docs/WEBHOOKS.md.",
+      "enum": [
+        "invoice.matched",
+        "invoice.review_required",
+        "feedback.received",
+        "material.suggestion.created"
+      ]
     },
     "payload": {
-      "type": "object"
+      "type": "object",
+      "description": "Typed, public-safe event payload. The concrete shape is selected by event_type via the oneOf discriminator below."
+    }
+  },
+  "oneOf": [
+    {
+      "$comment": "Discriminator branch: event_type === 'invoice.matched'.",
+      "properties": {
+        "event_type": {
+          "const": "invoice.matched"
+        },
+        "payload": {
+          "$ref": "#/$defs/InvoiceMatchedPayload"
+        }
+      }
+    },
+    {
+      "$comment": "Discriminator branch: event_type === 'invoice.review_required'.",
+      "properties": {
+        "event_type": {
+          "const": "invoice.review_required"
+        },
+        "payload": {
+          "$ref": "#/$defs/InvoiceReviewRequiredPayload"
+        }
+      }
+    },
+    {
+      "$comment": "Discriminator branch: event_type === 'feedback.received'.",
+      "properties": {
+        "event_type": {
+          "const": "feedback.received"
+        },
+        "payload": {
+          "$ref": "#/$defs/FeedbackReceivedPayload"
+        }
+      }
+    },
+    {
+      "$comment": "Discriminator branch: event_type === 'material.suggestion.created'.",
+      "properties": {
+        "event_type": {
+          "const": "material.suggestion.created"
+        },
+        "payload": {
+          "$ref": "#/$defs/MaterialSuggestionCreatedPayload"
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "InvoiceMatchedPayload": {
+      "title": "InvoiceMatchedPayload",
+      "type": "object",
+      "description": "Public-safe payload for the invoice.matched event. Public identifiers, status, and provenance only.",
+      "required": [
+        "invoice_id"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "invoice_id": {
+          "type": "string",
+          "description": "Public identifier of the invoice the match result pertains to."
+        },
+        "status_color": {
+          "type": "string",
+          "description": "Public match status indicator, aligned with match_result.status_color (ADR-0008). A reported status only; the underlying thresholds remain server-side and are not encoded here.",
+          "enum": [
+            "green",
+            "yellow",
+            "red"
+          ]
+        },
+        "method": {
+          "type": "string",
+          "description": "Public-safe provenance of the match, aligned with match_result.evidence[].method (FD-11 / AC-R2). A provenance flag only; it must not encode weights, trust tiers, scoring formulas, or any private engine internals.",
+          "enum": [
+            "deterministic",
+            "ai_assisted"
+          ]
+        }
+      }
+    },
+    "InvoiceReviewRequiredPayload": {
+      "title": "InvoiceReviewRequiredPayload",
+      "type": "object",
+      "description": "Public-safe payload for the invoice.review_required event. Public identifiers and status only.",
+      "required": [
+        "invoice_id"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "invoice_id": {
+          "type": "string",
+          "description": "Public identifier of the invoice flagged for human review."
+        },
+        "status_color": {
+          "type": "string",
+          "description": "Public match status indicator, aligned with match_result.status_color (ADR-0008). A reported status only; review thresholds remain server-side and are not encoded here.",
+          "enum": [
+            "green",
+            "yellow",
+            "red"
+          ]
+        }
+      }
+    },
+    "FeedbackReceivedPayload": {
+      "title": "FeedbackReceivedPayload",
+      "type": "object",
+      "description": "Public-safe payload for the feedback.received event. Public identifiers and the recorded feedback action only.",
+      "required": [
+        "invoice_line_id"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "invoice_line_id": {
+          "type": "string",
+          "description": "Public identifier of the invoice line the feedback pertains to."
+        },
+        "action": {
+          "type": "string",
+          "description": "Recorded feedback action, aligned with the public feedback.action vocabulary (schemas/feedback.schema.json). A recorded action only; it carries no learning rule or scoring logic.",
+          "enum": [
+            "accepted",
+            "rejected",
+            "corrected"
+          ]
+        }
+      }
+    },
+    "MaterialSuggestionCreatedPayload": {
+      "title": "MaterialSuggestionCreatedPayload",
+      "type": "object",
+      "description": "Public-safe payload for the material.suggestion.created event. Public identifiers only; the review-only suggestion content, scoring, and any AI reasoning are deliberately not exposed here.",
+      "required": [
+        "suggestion_id"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "suggestion_id": {
+          "type": "string",
+          "description": "Public identifier of the review-only suggestion that was created."
+        },
+        "material_id": {
+          "type": "string",
+          "description": "Public identifier of the material the suggestion relates to."
+        }
+      }
     }
   }
 }
