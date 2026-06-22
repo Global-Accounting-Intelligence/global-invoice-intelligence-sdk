@@ -10,16 +10,22 @@
   ],
   "properties": {
     "invoice_line_id": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "suggested_material_id": {
       "type": [
         "string",
         "null"
-      ]
+      ],
+      "minLength": 1
     },
     "confidence_score": {
-      "type": "number"
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Overall match confidence on the 0-100 integer scale (ADR-0008 / DC-4), consistent with evidence[].confidence and improvement_suggestions[].confidence. A reported value only; it does not encode matching weights, trust tiers, scoring formulas, or any private engine internals. The status_color thresholds remain server-side and are not encoded here.",
+      "$comment": "A8 SDK field-level hardening (DC-4): constrained to integer 0-100 per ADR-0008, aligned with the already-hardened per-entry confidence fields. This does not close DD-3 and does not declare B2 complete."
     },
     "status_color": {
       "type": "string",
@@ -30,7 +36,8 @@
       ]
     },
     "explanation": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "evidence": {
       "type": "array",

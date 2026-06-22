@@ -8,7 +8,8 @@
   ],
   "properties": {
     "invoice_line_id": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "action": {
       "type": "string",
@@ -22,7 +23,8 @@
       "type": [
         "string",
         "null"
-      ]
+      ],
+      "minLength": 1
     },
     "comment": {
       "type": [
