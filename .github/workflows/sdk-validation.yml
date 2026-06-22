@@ -1,0 +1,78 @@
+# SDK validation gates.
+#
+# Enforces, on every PR and on pushes to main, exactly the checks that Phase 6P
+# verified manually (docs/verification/phase-6p-sdk-live-verification-b2-dd3.md):
+#   - JSON / schema / example contract validation,
+#   - the Python SDK test,
+#   - the JavaScript SDK test.
+#
+# Scope is deliberately minimal. This workflow runs only commands the repository
+# already supports. It introduces no private-Core logic, no provider runtime
+# dependencies, and no secrets/credentials.
+name: SDK validation
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  contracts:
+    name: Schemas & examples
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install validation dependencies
+        run: python -m pip install --upgrade pip jsonschema pyyaml
+
+      - name: Validate invoice example (repo tool)
+        run: python tools/validate_invoice_schema.py
+
+      - name: Validate material example (repo tool)
+        run: python tools/validate_material_schema.py
+
+      - name: Validate SDK contracts (JSON, schemas, examples, OpenAPI YAML)
+        run: python tools/validate_sdk_contracts.py
+
+  python-sdk:
+    name: Python SDK tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install Python SDK + test dependencies
+        working-directory: sdk/python
+        run: python -m pip install --upgrade pip pytest httpx
+
+      - name: Run Python SDK tests
+        working-directory: sdk/python
+        run: python -m pytest -q
+
+  javascript-sdk:
+    name: JavaScript SDK tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Run JavaScript SDK tests
+        working-directory: sdk/javascript
+        run: npm test
