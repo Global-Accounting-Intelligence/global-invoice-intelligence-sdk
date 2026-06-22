@@ -4,6 +4,16 @@
   "confidence_score": 40,
   "status_color": "red",
   "explanation": "multiple similar candidates",
-  "evidence": {},
+  "evidence": [
+    {
+      "method": "ai_assisted",
+      "source_fields": [
+        "description"
+      ],
+      "source_type": "description_similarity",
+      "confidence": 40,
+      "summary": "Several candidate materials are similar; none is a confident match."
+    }
+  ],
   "improvement_suggestions": []
 }

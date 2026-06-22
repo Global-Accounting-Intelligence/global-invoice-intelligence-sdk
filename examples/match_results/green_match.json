@@ -4,6 +4,16 @@
   "confidence_score": 98,
   "status_color": "green",
   "explanation": "supplier reference matched",
-  "evidence": {},
+  "evidence": [
+    {
+      "method": "deterministic",
+      "source_fields": [
+        "supplier_item_code"
+      ],
+      "source_type": "supplier_reference",
+      "confidence": 98,
+      "summary": "Supplier item code matched a known material reference."
+    }
+  ],
   "improvement_suggestions": []
 }
