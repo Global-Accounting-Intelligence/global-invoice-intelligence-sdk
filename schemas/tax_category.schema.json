@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TaxCategory",
+  "$comment": "A9 SDK public I/O schema: public-safe tax-category classification/reference contract only. Tax is a review/matching signal only and is never required for matching (FD-10). This schema is deliberately generic and carries no country-specific legal logic, posting rules, or country-pack tax computation. It does not close DD-3 and does not declare B2 complete. It must never encode matching logic/weights, trust weights/tiers, scoring formulas, learning internals, or any private engine/Core internals.",
+  "type": "object",
+  "required": [
+    "tax_category_id"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "tax_category_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "rate": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "country_code": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AuditEvent",
+  "$comment": "A9 SDK public I/O schema: public-safe audit/provenance metadata contract only. Audit logging is append-only and must outlive the data it describes (AC-T3 / FD-9). This schema captures public audit metadata only and must never expose private engine traces, chain-of-thought, hidden reasoning, raw prompts, raw provider responses, cross-tenant learning data, matching/trust/scoring internals, weights/tiers, or tenant knowledge-graph internals. It does not close DD-3 and does not declare B2 complete.",
+  "type": "object",
+  "required": [
+    "audit_event_id",
+    "event_type",
+    "occurred_at"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "audit_event_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "event_type": {
+      "type": "string",
+      "minLength": 1
+    },
+    "occurred_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "actor_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "actor_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "subject_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "subject_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "summary": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

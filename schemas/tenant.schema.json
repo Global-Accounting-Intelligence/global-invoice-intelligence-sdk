@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Tenant",
+  "$comment": "A9 SDK public I/O schema: public-safe tenant identity/reference contract only. This schema does not close DD-3 and does not declare B2 complete. It exposes public tenant identity fields only and must never expose secrets, API keys, provider keys, tokens, billing internals, plan/subscription data, private configuration, or the internal tenant knowledge-graph model.",
+  "type": "object",
+  "required": [
+    "tenant_id",
+    "name"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "tenant_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "external_reference": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    }
+  }
+}
