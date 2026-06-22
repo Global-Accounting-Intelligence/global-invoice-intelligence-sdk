@@ -4,11 +4,29 @@
   "confidence_score": 78,
   "status_color": "yellow",
   "explanation": "description is similar",
-  "evidence": {},
+  "evidence": [
+    {
+      "method": "ai_assisted",
+      "source_fields": [
+        "description"
+      ],
+      "source_type": "description_similarity",
+      "confidence": 78,
+      "summary": "Line description is similar to a known material name."
+    }
+  ],
   "improvement_suggestions": [
     {
-      "type": "add_alias",
-      "value": "Pepsi 330ml"
+      "kind": "add_alias",
+      "target_field": "description",
+      "proposed_value": "Pepsi 330ml",
+      "status": "proposed",
+      "review_only": true,
+      "confidence": 78,
+      "evidence": [
+        "Line description closely matches an existing material name."
+      ],
+      "summary": "A reviewer may add this description as an alias for the suggested material."
     }
   ]
 }
