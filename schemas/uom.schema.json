@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Uom",
+  "$comment": "A9 SDK public I/O schema: public-safe unit-of-measure reference contract only. UOM is an optional reference; matching never requires UOM (FD-10 / AC-M1). This schema carries public reference fields only and deliberately contains no unit-conversion engine, conversion factors, or formulas. It does not close DD-3 and does not declare B2 complete, and must never encode matching logic/weights, trust weights/tiers, scoring formulas, learning internals, or any private engine/Core internals.",
+  "type": "object",
+  "required": [
+    "uom_id"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "uom_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "code": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

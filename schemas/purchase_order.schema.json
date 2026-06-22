@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PurchaseOrder",
+  "$comment": "A9 SDK public I/O schema: public-safe purchase-order header/reference contract only. A purchase order is an optional supporting signal; its presence is never required for matching and it must not be made mandatory anywhere (FD-7 / AC-M4). This schema does not close DD-3 and does not declare B2 complete. It carries public identifiers and reference fields only and must never encode matching logic/weights, trust weights/tiers, scoring or ranking formulas, learning internals, tenant knowledge-graph internals, or any private engine/Core internals.",
+  "type": "object",
+  "required": [
+    "purchase_order_id"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "purchase_order_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "supplier_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "supplier_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "issue_date": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "currency": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "lines": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/po_line"
+      }
+    }
+  },
+  "$defs": {
+    "po_line": {
+      "type": "object",
+      "required": [
+        "po_line_id"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "po_line_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "purchase_order_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "material_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "quantity": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "uom": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    }
+  }
+}
