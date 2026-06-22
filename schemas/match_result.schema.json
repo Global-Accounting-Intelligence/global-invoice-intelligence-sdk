@@ -87,8 +87,71 @@
     },
     "improvement_suggestions": {
       "type": "array",
+      "description": "Public-safe, review-only enrichment recommendations for this match: an ordered list of human-reviewable suggestions a reviewer MAY act on. Each entry is advisory only and is never an auto-applied mutation instruction (AC-R1). Support/explanation data only. This must not encode matching weights, trust weights/tiers, scoring formulas, ranking algorithms, learning internals, or any private engine/Core model internals.",
       "items": {
-        "type": "object"
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind",
+          "target_field",
+          "status",
+          "review_only",
+          "confidence",
+          "evidence"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "description": "Public-safe category of the suggested enrichment (intent/provenance only; not an executable instruction).",
+            "enum": [
+              "add_alias"
+            ],
+            "$comment": "A6 SDK hardening: conservative public-safe subset grounded in the available in-repo contract surface, pending final DD-3/B2 closure. The full FD-3 / DC-2 kind catalogue is owned by the planning-repo Field Dictionary; additional values are to be added when FD-3 is available in this repo and are not inferred here. This enum does not close DD-3 and does not declare B2 complete."
+          },
+          "target_field": {
+            "type": "string",
+            "description": "Public-safe input field name/path the suggestion applies to (e.g. an invoice line field). Field reference only; exposes no Core model or engine internals."
+          },
+          "proposed_value": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Optional public-safe proposed value for the suggested enrichment (e.g. an alias string). Plain data only; not an instruction to mutate any record."
+          },
+          "status": {
+            "type": "string",
+            "description": "Lifecycle of the suggestion (FD-3): 'proposed' = produced by the system and awaiting human review; 'confirmed' = accepted by a human reviewer. Reported state only.",
+            "enum": [
+              "proposed",
+              "confirmed"
+            ]
+          },
+          "review_only": {
+            "type": "boolean",
+            "const": true,
+            "description": "Always true. Asserts the suggestion is advisory and requires human review (AC-R1); it is never an auto-mutation instruction."
+          },
+          "confidence": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100,
+            "description": "Per-suggestion confidence on the 0-100 integer scale (consistent with confidence_score, ADR-0008). A reported value only; not a weight, trust tier, or scoring formula.",
+            "$comment": "Scale aligned with confidence_score (ADR-0008 / DC-4) to avoid introducing a conflicting confidence scale."
+          },
+          "evidence": {
+            "type": "array",
+            "description": "Public-safe support notes for why this suggestion was made. Short human-readable strings only; must not expose raw prompts, model reasoning, hidden chain-of-thought, provider raw responses, weighting, or scoring internals.",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          },
+          "summary": {
+            "type": "string",
+            "description": "Optional short, human-readable explanation of this suggestion. Support text only; must not expose raw prompts, model reasoning, hidden chain-of-thought, or provider raw responses."
+          }
+        }
       }
     }
   }
