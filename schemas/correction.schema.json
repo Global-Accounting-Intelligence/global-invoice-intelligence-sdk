@@ -8,10 +8,12 @@
   ],
   "properties": {
     "invoice_line_id": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "correct_material_id": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "reason": {
       "type": [

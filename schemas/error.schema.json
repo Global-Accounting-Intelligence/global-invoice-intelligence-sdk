@@ -4,10 +4,12 @@
   "type": "object",
   "properties": {
     "code": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "message": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     }
   }
 }
